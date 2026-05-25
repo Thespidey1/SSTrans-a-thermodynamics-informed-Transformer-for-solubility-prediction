@@ -1,8 +1,6 @@
 # SSTrans-a-thermodynamics-informed-Transformer-for-solubility-prediction
 Three-pronged evaluation framework for generalizability tests
 
-# SSTrans: a thermodynamics-informed transformer for solubility prediction in diverse solvents at various temperature
-
 This repository contains the code and data of SSTrans and those used for model development.
 ## Requirements for Environment
 To run the scripts provided in this repository, you'll need the following Python libraries:
