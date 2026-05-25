@@ -5,8 +5,8 @@ This repository contains the code and data of SSTrans and those used for model d
 ## Requirements for Environment
 To run the scripts provided in this repository, you'll need the following Python libraries:
 
-*absl-py==2.3.1
-*aimsim_core==2.2.3
+-absl-py==2.3.1
+-aimsim_core==2.2.3
 *aiohappyeyeballs==2.6.1
 *aiohttp==3.13.2
 *aiosignal==1.4.0
