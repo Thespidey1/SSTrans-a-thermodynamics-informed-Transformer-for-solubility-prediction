@@ -58,9 +58,8 @@ class Interaction_parameter_cal:
 
         # ref_solubility = ref_solubility.detach()
 
-        theoretical_solubility_298 = ref_solubility - (solvation_free_energy - ref_solvation_free_energy) / (R * 298)
-        theoretical_solubility = theoretical_solubility_298 + torch.log10(
-            torch.exp(-(solvation_enthalpy + sublimation_enthalpy) * norm_T / R))
+        theoretical_solubility_298 = ref_solubility - (solvation_free_energy - ref_solvation_free_energy) / (R * 298 * 2.3)
+        theoretical_solubility = theoretical_solubility_298 - (solvation_enthalpy + sublimation_enthalpy) * norm_T / (R * 2.3)
         if 'solubility' in normalizers:
             theoretical_solubility = normalizers['solubility'].norm(theoretical_solubility)
 
@@ -72,17 +71,14 @@ class Interaction_parameter_cal:
     def Thermo_params_loss(self, outputs, ref_outputs, labels):
         solvation_free_energy = outputs['solvation_free_energy']
         solvation_enthalpy = outputs['solvation_enthalpy']
-        sublimation_enthalpy = outputs['sublimation_enthalpy']
 
         ex_solvation_free_energy = labels['solvation_free_energy'].to(self.device)
         ex_solvation_enthalpy = labels['solvation_enthalpy'].to(self.device)
-        ex_sublimation_enthalpy = labels['sublimation_enthalpy'].to(self.device)
 
         solvation_free_energy_loss = F.mse_loss(solvation_free_energy, ex_solvation_free_energy)
         solvation_enthalpy_loss = F.mse_loss(solvation_enthalpy, ex_solvation_enthalpy)
-        sublimation_enthalpy_loss = F.mse_loss(sublimation_enthalpy, ex_sublimation_enthalpy)
 
-        Total_thermo_loss = solvation_free_energy_loss + solvation_enthalpy_loss + sublimation_enthalpy_loss
+        Total_thermo_loss = solvation_free_energy_loss + solvation_enthalpy_loss
 
         return Total_thermo_loss
 
