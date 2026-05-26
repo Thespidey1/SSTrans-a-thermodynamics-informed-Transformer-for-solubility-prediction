@@ -252,7 +252,12 @@ To run the scripts provided in this repository, you'll need the following Python
 
 To install required packages, use the command: `pip install <package_name>==<version_number>`. For example, `pip install rdkit==2023.3.3`. The entire requirements can be installled directly through 'pip install -r requirements.txt'.
 
-## Usage
+## Models
+The full SSTrans architecture is implemented as the main model class in `models.py`.  
+Users can customize the model within the PyTorch framework for training, testing, and prediction tasks.  
+Detailed usage instructions are provided below.
+
+## Predict
 First, download the entire repository as zip file and unzip it. The datasets and corresponding descriptors are provided in `.xlsx` format. To train and test the DL models, just run the `CV.py` file. If you want to reduce training time, just specify a trained weight in `model_weight` directory. To train and test statistical ML moldes and their Stakings, run the `.py` file with the corresponding name. The `opt.py` files in each directory are for hyperparameter optimization. `Metrics_compute_class.py` files are used to generate metrics and corresponding figures. Please note that `Metrics_compute_class.py` should run after training process, in which tables will be generated about training and testing results.
 
 The above process is feasible to run through command line. For example, `cd Classification models\RF`, then `python RF.py`.
