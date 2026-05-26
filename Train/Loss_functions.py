@@ -31,10 +31,8 @@ class Interaction_parameter_cal:
         return gradient_loss
 
     def thermodynamic_consistency_loss(self, outputs, ref_outputs, labels):
-        """确保预测结果符合热力学关系的损失函数"""
         normalizers = self.normalizers
         norm_T = labels['temperature_norm'].to(self.device)
-        # 提取预测值
         predicted_solubility = outputs['solubility']
         solvation_free_energy = outputs['solvation_free_energy']
         solvation_enthalpy = outputs['solvation_enthalpy']
@@ -56,17 +54,13 @@ class Interaction_parameter_cal:
         if 'sublimation_enthalpy' in normalizers:
             sublimation_enthalpy = normalizers['sublimation_enthalpy'].denorm(sublimation_enthalpy)
 
-        # 气体常数
         R = 8.314 / 4184  # kcal/(mol·K)
-
-        # 基于溶剂化自由能计算的理论溶解度 (Van't Hoff方程) 所有solubility均为LogS!!!
 
         # ref_solubility = ref_solubility.detach()
 
         theoretical_solubility_298 = ref_solubility - (solvation_free_energy - ref_solvation_free_energy) / (R * 298)
         theoretical_solubility = theoretical_solubility_298 + torch.log10(
             torch.exp(-(solvation_enthalpy + sublimation_enthalpy) * norm_T / R))
-        # 理论溶解度与预测溶解度一致性损失
         if 'solubility' in normalizers:
             theoretical_solubility = normalizers['solubility'].norm(theoretical_solubility)
 
@@ -93,17 +87,15 @@ class Interaction_parameter_cal:
         return Total_thermo_loss
 
     def cosmo_params_loss(self, outputs, labels):
-        total_loss = 0.0  # 使用标量或零张量（无需梯度）
-        valid_count = 0  # 有效样本计数器
+        total_loss = 0.0
+        valid_count = 0
 
-        # 处理 solvation_free_energy
         if 'solvation_free_energy' in labels and 'solvation_free_energy' in outputs:
             ex_sfe = labels['solvation_free_energy'].to(self.device)
             pred_sfe = outputs['solvation_free_energy']
 
-            # 联合过滤无效样本（标签和输出均有效）
             valid_mask = ~torch.isnan(ex_sfe) & ~torch.isnan(pred_sfe)
-            valid_mask = valid_mask.squeeze(-1)  # 保持维度安全
+            valid_mask = valid_mask.squeeze(-1)
 
             if valid_mask.any():
                 valid_ex = ex_sfe[valid_mask]
@@ -112,7 +104,6 @@ class Interaction_parameter_cal:
                 total_loss += batch_loss
                 valid_count += valid_mask.sum().item()
 
-        # 处理 solvation_enthalpy（逻辑同上）
         if 'solvation_enthalpy' in labels and 'solvation_enthalpy' in outputs:
             ex_sh = labels['solvation_enthalpy'].to(self.device)
             pred_sh = outputs['solvation_enthalpy']
@@ -126,7 +117,6 @@ class Interaction_parameter_cal:
                 total_loss += batch_loss
                 valid_count += valid_mask.sum().item()
 
-        # 归一化损失（避免空batch）
         if valid_count > 0:
             total_loss = total_loss / valid_count
         else:
@@ -151,7 +141,6 @@ class Interaction_parameter_cal:
         hydrophobicity_compatibility = outputs['hydrophobicity_compatibility']
         electrostatic_compatibility = outputs['electrostatic_compatibility']
         flexibility_compatibility = outputs['flexibility_compatibility']
-        aromaticity_compatibility = outputs['aromaticity_compatibility']
         charge_compatibility = outputs['charge_compatibility']
 
         ex_polarity_compatibility = labels['polarity_compatibility'].to(self.device)
@@ -160,7 +149,6 @@ class Interaction_parameter_cal:
         ex_hydrophobicity_compatibility = labels['hydrophobicity_compatibility'].to(self.device)
         ex_electrostatic_compatibility = labels['electrostatic_compatibility'].to(self.device)
         ex_flexibility_compatibility = labels['flexibility_compatibility'].to(self.device)
-        ex_aromaticity_compatibility = labels['aromaticity_compatibility'].to(self.device)
         ex_charge_compatibility = labels['charge_compatibility'].to(self.device)
 
         polarity_compatibility_loss = F.mse_loss(polarity_compatibility, ex_polarity_compatibility)
@@ -169,10 +157,9 @@ class Interaction_parameter_cal:
         hydrophobicity_compatibility_loss = F.mse_loss(hydrophobicity_compatibility, ex_hydrophobicity_compatibility)
         electrostatic_compatibility_loss = F.mse_loss(electrostatic_compatibility, ex_electrostatic_compatibility)
         flexibility_compatibility_loss = F.mse_loss(flexibility_compatibility, ex_flexibility_compatibility)
-        aromaticity_compatibility_loss = F.mse_loss(aromaticity_compatibility, ex_aromaticity_compatibility)
         charge_compatibility_loss = F.mse_loss(charge_compatibility, ex_charge_compatibility)
 
-        Total_inter_loss = polarity_compatibility_loss + size_compatibility_loss + hbond_compatibility_loss + hydrophobicity_compatibility_loss + electrostatic_compatibility_loss + flexibility_compatibility_loss
+        Total_inter_loss = polarity_compatibility_loss + size_compatibility_loss + hbond_compatibility_loss + hydrophobicity_compatibility_loss + electrostatic_compatibility_loss + flexibility_compatibility_loss + charge_compatibility
 
         return Total_inter_loss
 
@@ -204,7 +191,6 @@ class Interaction_parameter_cal:
         return Total_inter_loss
 
     def whole_loss(self, outputs, ref_outputs, labels):
-        """确保预测结果符合热力学关系的损失函数"""
         main_loss = self.main_loss(outputs, ref_outputs, labels)
         thermodynamic_consistency_loss = self.thermodynamic_consistency_loss(outputs, ref_outputs, labels)
         Thermo_params_loss = self.Thermo_params_loss(outputs, ref_outputs, labels)
@@ -217,7 +203,6 @@ class Interaction_parameter_cal:
         return whole_loss
 
     def basic_loss(self, outputs, ref_outputs, labels):
-        """确保预测结果符合热力学关系的损失函数"""
         main_loss = self.main_loss(outputs, ref_outputs, labels)
         thermodynamic_consistency_loss = self.thermodynamic_consistency_loss(outputs, ref_outputs, labels)
 
@@ -226,7 +211,6 @@ class Interaction_parameter_cal:
         return basic_loss
 
     def main_cons_therm_loss(self, outputs, ref_outputs, labels):
-        """确保预测结果符合热力学关系的损失函数"""
         main_loss = self.main_loss(outputs, ref_outputs, labels)
         thermodynamic_consistency_loss = self.thermodynamic_consistency_loss(outputs, ref_outputs, labels)
         Thermo_params_loss = self.Thermo_params_loss(outputs, ref_outputs, labels)
