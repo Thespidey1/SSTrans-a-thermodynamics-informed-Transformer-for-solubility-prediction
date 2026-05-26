@@ -258,11 +258,36 @@ Users can customize the model within the PyTorch framework for training, testing
 Detailed usage instructions are provided below.
 
 ## Predict
+Before prediction, please prepare the input file `Smiles_for_pre.xlsx`, which should contain the solute SMILES, solvent SMILES, and temperature information. An example input file is provided in this repository.
 
+The code for loading the trained models and performing prediction is provided in `Predict.py`.
 
-The above process is feasible to run through command line. For example, `cd Classification models\RF`, then `python RF.py`.
-```bash
-Machine learns aqueous solubility of drugs>cd Classification models\RF
+A more detailed step-by-step instruction is available in `demo.ipynb`, which can be run directly.
 
-Machine learns aqueous solubility of drugs\Classification models\RF>python RF.py
-```
+The trained model parameter files:
+
+- `best_model1.pth`
+- `best_model2.pth`
+- `best_model3.pth`
+- `best_model4.pth`
+- `best_model5.pth`
+
+are available on Zenodo. Please download these files and place them in the `Predict` directory before running the prediction code.
+
+## Train
+The data used for model construction and pretraining have been pre-tokenized and saved as `.pt` files to accelerate training.
+
+The scripts for training, validation, testing, and pretraining are provided in `Training_validation_test.py`.
+
+You can modify `config.yaml` to adjust:
+
+- Model configurations
+- Loss functions
+- Hyperparameters
+- Different stages of the model development workflow
+
+Please note that leaving the pretraining path empty means that no pretrained model will be used. Moreover, please change the normalizer to 'valid stage' when making predictions on validation sets.
+
+Before training, download the required `.pt` data files from Zenodo and place them in the `Train` directory.
+
+You can directly run `demo.ipynb` to start training and check whether all required files are available.
