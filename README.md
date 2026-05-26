@@ -255,7 +255,7 @@ To install required packages, use the command: `pip install <package_name>==<ver
 ## Models
 The full SSTrans architecture is implemented as the main model class in `models.py`.  
 Users can customize the model within the PyTorch framework for training, testing, and prediction tasks.  
-Detailed usage instructions are provided below.
+Ulternatively, ypu may also follow the detailed usage instructions provided below.
 
 ## Predict
 Before prediction, please prepare the input file `Smiles_for_pre.xlsx`, which should contain the solute SMILES, solvent SMILES, and temperature information. An example input file is provided in this repository.
