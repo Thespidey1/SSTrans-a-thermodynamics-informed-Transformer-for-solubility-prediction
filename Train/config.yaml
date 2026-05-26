@@ -1,0 +1,78 @@
+epochs: 50
+gpu: cuda:0
+lr_decay_patience: 7
+early_stop_patience: 10
+# 30
+lr_decay_factor: 0.9
+split by: index
+k : 5
+seed: 1
+
+alpha: 0
+beta: 0.7
+gamma: 0
+delta: 0.03
+epsilon: 0
+
+metric_type: solubility
+#solubility, cosmo_param, inter_param
+
+task_type: fine_tuning
+#fine_tuning, asymmetric_pretraining, symmetric_pretraining
+
+model_name: whole_block
+# whole_block, AS_pretrain, S_pretrain, no_cross, Mere_symmetric_part
+
+loss_function: whole_loss
+# whole_loss, cosmo_loss_2, inter_params_loss_2, main
+
+model_stage: test
+
+normalizer_path: test_stage_norm.pt
+#test_stage_norm.pt, valid_stage_norm.pt,asymmetric_stage_norm.pt
+
+model_save: True
+
+save_path_pretrain: symmetric_pretrain.pth
+#symmetric_pretrain.pth，asymmetric_pretrain.pth
+
+csv_save: True
+best_model_path: best_model.pth
+
+
+batch_size: 64
+# 64
+
+init_lr: 0.00001
+# 0.00001, 0.000001
+
+min_lr : 0.000003
+# 0.000003, 0.0000003
+
+weight_decay: 0
+
+DA : True
+Freeze : False
+
+unsupervised_pretrain:
+  freeze_roberta: False
+  freeze_layers: 4
+  pretrained_path: pretrained_model_2M.pth
+# pretrained_model_2M.pth
+
+asymmetric_pretrain:
+  pretrained_path: 
+#asymmetric_pretrain.pth
+
+symmetric_pretrain:
+  pretrained_path: symmetric_pretrain.pth
+#symmetric_pretrain.pth
+
+
+transformer:
+  ntoken: 1502
+  d_model: 256
+  nhead: 4
+  d_hid: 512
+  nlayers: 4
+  dropout: 0
