@@ -37,6 +37,13 @@ save_path_pretrain: symmetric_pretrain.pth
 #symmetric_pretrain.pth，asymmetric_pretrain.pth
 
 csv_save: True
+train_save_path: train_results.csv
+solute_save_path: solute_results.csv
+solvent_save_path: solvent_results.csv
+temperature_save_path: temperature_results.csv
+train_save_path_2: train_2_results.csv
+valid_save_path: valid_results.csv
+
 best_model_path: best_model.pth
 
 
