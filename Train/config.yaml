@@ -58,7 +58,7 @@ min_lr : 0.000003
 
 weight_decay: 0
 
-DA : True
+DA : False
 Freeze : False
 
 unsupervised_pretrain:
