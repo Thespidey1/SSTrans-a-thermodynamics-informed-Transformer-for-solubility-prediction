@@ -155,7 +155,7 @@ class Interaction_parameter_cal:
         flexibility_compatibility_loss = F.mse_loss(flexibility_compatibility, ex_flexibility_compatibility)
         charge_compatibility_loss = F.mse_loss(charge_compatibility, ex_charge_compatibility)
 
-        Total_inter_loss = polarity_compatibility_loss + size_compatibility_loss + hbond_compatibility_loss + hydrophobicity_compatibility_loss + electrostatic_compatibility_loss + flexibility_compatibility_loss + charge_compatibility
+        Total_inter_loss = polarity_compatibility_loss + size_compatibility_loss + hbond_compatibility_loss + hydrophobicity_compatibility_loss + electrostatic_compatibility_loss + flexibility_compatibility_loss + charge_compatibility_loss
 
         return Total_inter_loss
 
